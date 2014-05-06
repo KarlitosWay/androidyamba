@@ -1,10 +1,14 @@
 package com.way.karlitos.yamba;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.marakana.android.yamba.clientlib.YambaClient;
 import com.marakana.android.yamba.clientlib.YambaClientException;
 
@@ -22,6 +27,8 @@ import com.marakana.android.yamba.clientlib.YambaClientException;
 
 
 public class StatusFragment extends Fragment implements OnClickListener {
+	
+	SharedPreferences prefs;
 	
 	private static final String TAG = "StatusFragment";
 	private EditText editStatus;
@@ -78,10 +85,24 @@ public class StatusFragment extends Fragment implements OnClickListener {
 		
 		@Override
 		protected String doInBackground(String... params) {
-			YambaClient yambaCloud =
-					new YambaClient("student", "password");
 			try {
-				yambaCloud.postStatus(params[0]);
+				SharedPreferences prefs = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				String username = prefs.getString("username", "");
+				String password = prefs.getString("password", "");
+				// Check that username and password are not empty.
+				// If empty, Toast a message to set login info and bounce
+				// to SettingActivity.
+				// Hint: TextUtils.
+				if (TextUtils.isEmpty(username) ||
+						TextUtils.isEmpty(password)) {
+					getActivity().startActivity(
+							new Intent(getActivity(), SettingsActivity.class));
+					return "Please update your username and password";
+				}
+				YambaClient cloud = new YambaClient(username, password);
+
+				cloud.postStatus(params[0]);
 				return "Successfully posted";
 			} catch (YambaClientException e) {
 				e.printStackTrace();
