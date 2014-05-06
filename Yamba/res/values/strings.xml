@@ -15,5 +15,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="action_tweet">Tweet</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_purge">Purge</string>
 
 </resources>

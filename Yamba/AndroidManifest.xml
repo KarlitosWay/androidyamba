@@ -21,9 +21,16 @@
             android:authorities="com.way.karlitos.yamba.StatusProvider"
             android:exported="false" />
         
+        <service android:name=".RefreshService" />
+                
         <activity
             android:name="com.way.karlitos.yamba.StatusActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="com.way.karlitos.yamba.action.tweet" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name="com.way.karlitos.yamba.SettingsActivity"
@@ -34,9 +41,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            android:label="@string/title_activity_main" >
         </activity>
-        <service android:name=".RefreshService" />
+        <activity android:name="com.way.karlitos.yamba.DetailsActivity" >
+		</activity>
     </application>
 
 </manifest>
